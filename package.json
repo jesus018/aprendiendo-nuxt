@@ -4,11 +4,12 @@
   "description": "Pagina web con nuxt",
   "main": "index.js",
   "scripts": {
-    "dev": "nuxt" 
+    "dev": "nuxt"
   },
   "author": "Jesus Agreda",
   "license": "ISC",
   "dependencies": {
+    "bootstrap-vue": "^2.0.0-rc.15",
     "nuxt": "^2.4.5"
   }
 }
