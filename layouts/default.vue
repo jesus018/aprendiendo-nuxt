@@ -1,14 +1,16 @@
 <template>
-    <div>
-        <navbar></navbar>
-        <Nuxt />
-        esto es un footer
+  <div>
+    <navbar></navbar>
+    <div class="container-fluid">
+      <Nuxt />
     </div>
+
+  </div>
 </template>
 
 <script>
-import navbar from '../components/navbar'
+import navbar from "../components/navbar";
 export default {
-    components: {navbar},
-}
+  components: { navbar }
+};
 </script>
