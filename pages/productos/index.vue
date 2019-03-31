@@ -1,13 +1,21 @@
 <template>
-    <div class="row mt-3">
-        <div class="col-sm-6">
-            <h2>Lista de Productos</h2>
-        </div>
-
-        <div class="col-sm-6">
-            <b-button variant="primary" href="/productos/crear">
-                Nuevo
-            </b-button>
-        </div>
+  <div class="row mt-3">
+    <div class="col-sm-6">
+      <h2>Lista de Productos</h2>
     </div>
+
+    <div class="col-sm-6">
+      <b-button variant="primary" href="/productos/crear">Nuevo</b-button>
+    </div>
+
+    <b-container class="bv-example-row">
+      <b-row class="text-center">
+        <b-col>Nombre</b-col>
+        <b-col>Imagen</b-col>
+        <b-col>Precio</b-col>
+        <b-col>Cantidad</b-col>
+        <b-col>Acciones</b-col>
+      </b-row>
+    </b-container>
+  </div>
 </template>
