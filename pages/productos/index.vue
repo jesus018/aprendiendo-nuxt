@@ -7,21 +7,21 @@
     <div class="col-sm-6">
       <b-button variant="primary" href="/productos/crear">Nuevo</b-button>
     </div>
-    <!--
-    <b-container class="bv-example-row">
-      <b-row class="text-center">
-        <b-col>Nombre</b-col>
-        <b-col>Imagen</b-col>
-        <b-col>Precio</b-col>
-        <b-col>Cantidad</b-col>
-        <b-col>Acciones</b-col>
-      </b-row>
-    </b-container>
-    -->
+
     <div class="row mt-2">
-      <div class="col-sm-12">
-        <b-table responsive striped hover :fields="fields" :items="productos"/>
-      </div>
+      <b-table id="productos" responsive striped hover :fields="fields" :items="productos" :current-page="currentPage" :per-page="perPage" :bordered="bordered"/>
+
+      <b-pagination
+      v-model="currentPage"
+      :total-rows="rows"
+      :per-page="perPage"
+      first-text="Primera"
+      prev-text="Anterior"
+      next-text="Siguiente"
+      last-text="Ultima"
+      aria-controls="productos"
+      align="center"
+    ></b-pagination>
     </div>
   </div>
 </template>
@@ -35,14 +35,16 @@ export default {
       .collection("productos")
       .get()
       .then(productosSnap => {
-        let productos = []
+        let productos = [];
 
         productosSnap.forEach(value => {
           productos.push(value.data());
         });
 
         return {
-          productos
+          productos,
+          currentPage: 1,
+          perPage: 5,
         };
       });
   },
@@ -51,6 +53,11 @@ export default {
     return {
       fields: ["Imagen", "nombre", "precio", "cantidad", "Acciones"]
     };
+  },
+  computed: {
+    rows(){
+      return this.productos.length
+    }
   }
 };
 </script>
