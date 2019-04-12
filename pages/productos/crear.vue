@@ -46,7 +46,10 @@
       </b-row>
       <b-row class="text-center">
         <b-col lg="6" md="6" offset-md="3">
-          <b-button variant="primary" type="submit">Guardar</b-button>
+          <b-spinner label="Loading..." variant="primary" v-if="guardando"></b-spinner>
+          <b-button variant="primary" type="submit" :disabled="t">
+            Guardar
+          </b-button>
           <b-button style="background-color: #049E3A; color: white">Cancelar</b-button>
           <b-button variant="secondary" href="/productos">Volver</b-button>
         </b-col>
@@ -56,7 +59,7 @@
 </template>
 
 <script>
-import { db } from '../../services/firebase'
+import { db } from "../../services/firebase";
 
 export default {
   data() {
@@ -65,16 +68,22 @@ export default {
         nombre: "",
         cantidad: "",
         precio: ""
-      }
+      },
+      guardando: false,
+      t: false
     };
   },
   methods: {
     guardarProducto() {
-      db.collection("productos").add(this.form).then(res => {
-        this.$router.push({
-          path: "/productos"
-        })
-      })
+      this.guardando = true;
+      this.t = true;
+      db.collection("productos")
+        .add(this.form)
+        .then(res => {
+          this.$router.push({
+            path: "/productos"
+          });
+        });
     }
   }
 };

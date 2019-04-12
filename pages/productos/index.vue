@@ -9,19 +9,39 @@
     </div>
 
     <div class="row mt-2">
-      <b-table id="productos" responsive striped hover :fields="fields" :items="productos" :current-page="currentPage" :per-page="perPage" :bordered="bordered"/>
+      <b-table
+        id="productos"
+        responsive
+        striped
+        hover
+        :fields="fields"
+        :items="productos"
+        :current-page="currentPage"
+        :per-page="perPage"
+        :bordered="bordered"
+      >
+        <template slot="acciones">
+          <b-button variant="success">
+            Editar
+          </b-button>
+
+          <b-button variant="danger">
+            Eliminar
+          </b-button>
+        </template>
+      </b-table>
 
       <b-pagination
-      v-model="currentPage"
-      :total-rows="rows"
-      :per-page="perPage"
-      first-text="Primera"
-      prev-text="Anterior"
-      next-text="Siguiente"
-      last-text="Ultima"
-      aria-controls="productos"
-      align="center"
-    ></b-pagination>
+        v-model="currentPage"
+        :total-rows="rows"
+        :per-page="perPage"
+        first-text="Primera"
+        prev-text="Anterior"
+        next-text="Siguiente"
+        last-text="Ultima"
+        aria-controls="productos"
+        align="center"
+      ></b-pagination>
     </div>
   </div>
 </template>
@@ -44,19 +64,24 @@ export default {
         return {
           productos,
           currentPage: 1,
-          perPage: 5,
+          perPage: 5
         };
       });
   },
 
   data() {
     return {
-      fields: ["Imagen", "nombre", "precio", "cantidad", "Acciones"]
+      fields: ["Imagen", "nombre", "precio", "cantidad", "acciones"]
     };
   },
   computed: {
-    rows(){
-      return this.productos.length
+    rows() {
+      return this.productos.length;
+    }
+  },
+  methods: {
+    eliminarProducto(){
+      db.collection('productos').delete(id)
     }
   }
 };
