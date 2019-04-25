@@ -9,6 +9,7 @@
     </div>
 
     <div class="row mt-2">
+      <b-col cols="12" md="18" offset-md="11">
       <b-table
         id="productos"
         responsive
@@ -20,14 +21,14 @@
         :per-page="perPage"
         :bordered="bordered"
       >
-        <template slot="acciones">
-          <b-button variant="success">
-            Editar
-          </b-button>
+        <template slot="acciones" slot-scope="data">
+          <b-button variant="success">Editar</b-button>
 
-          <b-button variant="danger">
-            Eliminar
-          </b-button>
+          <b-button
+            variant="danger"
+            type="button"
+            @click="eliminarProducto(data.item.id)"
+          >Eliminar</b-button>
         </template>
       </b-table>
 
@@ -42,6 +43,7 @@
         aria-controls="productos"
         align="center"
       ></b-pagination>
+      </b-col>
     </div>
   </div>
 </template>
@@ -58,7 +60,10 @@ export default {
         let productos = [];
 
         productosSnap.forEach(value => {
-          productos.push(value.data());
+          productos.push({
+            id: value.id,
+            ...value.data()
+          });
         });
 
         return {
@@ -80,8 +85,17 @@ export default {
     }
   },
   methods: {
-    eliminarProducto(){
-      db.collection('productos').delete(id)
+    eliminarProducto(id) {
+      db.collection("productos")
+        .doc(id)
+        .delete()
+        .then(() => {
+          let index
+          this.productos.map((value,key) => {
+            if(value.id == id) index = key
+          })
+          this.productos.splice(index, 1);
+        });
     }
   }
 };
