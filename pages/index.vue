@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <h1>Hola {{ msg }}</h1>
@@ -38,6 +37,3 @@ export default {
   }
 };
 </script>
-
-<style>
-</style>

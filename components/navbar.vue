@@ -16,12 +16,16 @@
         <b-collapse is-nav id="menu">
             <b-navbar-nav>
 
-                <b-nav-item href="/contacto">
-                    Contacto
-                </b-nav-item>
-
                 <b-nav-item href="/productos">
                     Productos
+                </b-nav-item>
+
+                <b-nav-item href="/categorias">
+                    Categorias
+                </b-nav-item>
+
+                <b-nav-item href="/contacto">
+                    Contacto
                 </b-nav-item>
             </b-navbar-nav>
         </b-collapse>

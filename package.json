@@ -4,7 +4,8 @@
   "description": "Pagina web con nuxt",
   "main": "index.js",
   "scripts": {
-    "dev": "nuxt"
+    "dev": "nuxt",
+    "generate": "nuxt generate"
   },
   "author": "Jesus Agreda",
   "license": "ISC",

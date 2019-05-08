@@ -1,17 +1,11 @@
 <template>
-  <b-form name="form_producto" @submit.prevent="guardarProducto">
-    <h2>Crear Nuevo Producto</h2>
+    <b-form name="form_categoria" @submit.prevent="guardarCategoria">
+    <h2>Crear Nueva Categoria</h2>
     <b-container class="bv-example-row">
       <b-row class="text-center">
         <b-col cols="12" md="4" offset-md="4">
           <div class="form-group">
-            <label for="url">URL Imagen</label>
-            <input
-              type="text"
-              class="form-control"
-              name="url"
-              placeholder="Ingresa la URL de la imagen"
-            >
+            
             <label for="nombre">Nombre</label>
             <input
               type="text"
@@ -21,24 +15,7 @@
               v-model="form.nombre"
               placeholder="Ingresa el nombre"
             >
-            <label for="precio">Precio</label>
-            <input
-              type="number"
-              class="form-control"
-              name="precio"
-              required
-              v-model="form.precio"
-              placeholder="Ingresa el precio"
-            >
-            <label for="cantidad">Cantidad</label>
-            <input
-              type="number"
-              class="form-control"
-              name="cantidad"
-              required
-              v-model="form.cantidad"
-              placeholder="Ingresa la cantidad"
-            >
+            
           </div>
 
           <div class="row" id="galeria"></div>
@@ -51,7 +28,7 @@
             Guardar
           </b-button>
           <b-button style="background-color: #049E3A; color: white">Cancelar</b-button>
-          <b-button variant="secondary" href="/productos">Volver</b-button>
+          <b-button variant="secondary" href="/categorias">Volver</b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -66,25 +43,29 @@ export default {
     return {
       form: {
         nombre: "",
-        cantidad: "",
-        precio: ""
       },
       guardando: false,
       t: false
     };
   },
   methods: {
-    guardarProducto() {
+    guardarCategoria() {
       this.guardando = true;
       this.t = true;
-      db.collection("productos")
+      db.collection("categorias")
         .add(this.form)
         .then(res => {
           this.$router.push({
-            path: "/productos"
+            path: "/categorias"
           });
         });
     }
   }
 };
 </script>
+
+<style>
+#app {
+  background-color: black
+}
+</style>
