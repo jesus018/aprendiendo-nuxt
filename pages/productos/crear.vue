@@ -5,13 +5,9 @@
       <b-row class="text-center">
         <b-col cols="12" md="4" offset-md="4">
           <div class="form-group">
-            <label for="url">URL Imagen</label>
-            <input
-              type="text"
-              class="form-control"
-              name="url"
-              placeholder="Ingresa la URL de la imagen"
-            >
+            <b-form-group label="Imagen: " label-for="imagen">
+              <b-form-file placeholder="Cargar imagen" accept="imagen/*" v-model="imagenProduct"/>
+            </b-form-group>
             <label for="nombre">Nombre</label>
             <input
               type="text"
@@ -47,9 +43,7 @@
       <b-row class="text-center">
         <b-col lg="6" md="6" offset-md="3">
           <b-spinner label="Loading..." variant="primary" v-if="guardando"></b-spinner>
-          <b-button variant="primary" type="submit" :disabled="t">
-            Guardar
-          </b-button>
+          <b-button variant="primary" type="submit" :disabled="t">Guardar</b-button>
           <b-button style="background-color: #049E3A; color: white">Cancelar</b-button>
           <b-button variant="secondary" href="/productos">Volver</b-button>
         </b-col>
@@ -59,7 +53,8 @@
 </template>
 
 <script>
-import { db } from "../../services/firebase";
+import { db, storage } from "../../services/firebase";
+import { async } from "q";
 
 export default {
   data() {
@@ -70,6 +65,7 @@ export default {
         precio: ""
       },
       guardando: false,
+      imagenProduct: "",
       t: false
     };
   },
@@ -77,13 +73,18 @@ export default {
     guardarProducto() {
       this.guardando = true;
       this.t = true;
-      db.collection("productos")
-        .add(this.form)
-        .then(res => {
-          this.$router.push({
-            path: "/productos"
+      let imagenRef = storage.child(this.imagenProduct.name);
+
+      imagenRef.put(this.imagenProduct).then(async imageRes => {
+        this.form.imagen = await imageRes.ref.getDownloadURL(); //se obtiene la UL de la imagen
+        db.collection("productos")
+          .add(this.form)
+          .then(res => {
+            this.$router.push({
+              path: "/productos"
+            });
           });
-        });
+      });
     }
   }
 };

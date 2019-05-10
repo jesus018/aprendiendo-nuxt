@@ -76,7 +76,7 @@ export default {
 
   data() {
     return {
-      fields: ["Imagen", "nombre", "precio", "cantidad", "acciones"]
+      fields: ["imagen", "nombre", "precio", "cantidad", "acciones"]
     };
   },
   computed: {
