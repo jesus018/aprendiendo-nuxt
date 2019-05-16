@@ -35,6 +35,9 @@
               v-model="form.cantidad"
               placeholder="Ingresa la cantidad"
             >
+            <b-form-group label="Categoria" label-for='categoria'>
+              <b-form-select id="categoria" v-model="form.categoria" :options="categorias"></b-form-select>
+            </b-form-group>
           </div>
 
           <div class="row" id="galeria"></div>
@@ -54,9 +57,22 @@
 
 <script>
 import { db, storage } from "../../services/firebase";
-import { async } from "q";
 
 export default {
+  asyncData() {
+    return db
+      .collection("categorias")
+      .get()
+      .then(categoriasSnap => {
+        let categorias = [];
+
+        categoriasSnap.forEach(value => {
+          categorias.push(value.data().nombre);
+        });
+        return { categorias };
+      });
+  },
+
   data() {
     return {
       form: {

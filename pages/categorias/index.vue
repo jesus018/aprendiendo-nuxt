@@ -9,7 +9,7 @@
     </div>
 
     <div class="row mt-2">
-      <b-col cols="12" md="18" offset-md="11">
+      <b-col cols="12" md="12" offset-md="11">
         <b-table
           id="categorias"
           responsive
@@ -19,18 +19,21 @@
           :items="categorias"
           :current-page="currentPage"
           :per-page="perPage"
+          :busy="isBusy"
         >
+         <div slot="table-busy" class="text-center my-2">
+        <b-spinner variant="primary" class="align-middle" label="Loading..."></b-spinner>
+        <strong>Cargando...</strong>
+      </div>
           <template slot="acciones" slot-scope="data">
             <b-button
-              variant="success"
-              v-b-modal.modal-1
-              @click="editarCategoria(data.item.id)"
+              variant="success"              
             >Editar</b-button>
 
             <b-button
               variant="danger"
               type="button"
-              @click="eliminarCategoria(data.item.id)"
+              @click="mensaje(data.item.id,data.index)"
             >Eliminar</b-button>
           </template>
         </b-table>
@@ -48,14 +51,6 @@
         ></b-pagination>
       </b-col>
     </div>
-
-    <b-form>
-      <b-modal id="modal-1" title="Editar Categoria">
-        <b-form-group id="input-group" label="Nombre:" label-for="input1">
-          <b-form-input id="input-2" v-model="form.nombre" required placeholder="Ingrese un Nombre"></b-form-input>
-        </b-form-group>
-      </b-modal>
-    </b-form>
   </div>
 </template>
 
@@ -80,14 +75,17 @@ export default {
         return {
           categorias,
           currentPage: 1,
-          perPage: 5
+          perPage: 3
         };
       });
   },
 
   data() {
     return {
-      fields: ["nombre", "acciones"],
+      isBusy: false,
+      boxTwo: '',
+      fields: [{key: "nombre", sortable: true}, {key: "acciones"}],
+      //fields: ["nombre", "acciones"],
       form: {
         nombre: "",
         datos: ""
@@ -100,7 +98,7 @@ export default {
     }
   },
   methods: {
-    eliminarCategoria(id) {
+    /*eliminarCategoria(id) { //Elimina sin confirmar
       db.collection("categorias")
         .doc(id)
         .delete()
@@ -111,20 +109,39 @@ export default {
           });
           this.categorias.splice(index, 1);
         });
-    },
+    },*/
 
-    editarCategoria(id) {
-      db.collection("categorias")
-        .get()
-        .then(() => {
-          let index;
-          let datos;
-          this.categorias.map((value, key) => {
-            if (value.id == id) index = key, datos = value;
-          });
-          this.form.nombre = JSON.parse(JSON.stringify(vm.$datos))
-        });
-    }
+    mensaje(id, index) {
+      this.boxTwo = ''
+      this.$bvModal.msgBoxConfirm('¿Desea Eliminar Esta Categoria?', {
+        title: 'Eliminar',
+        size: 'sm',
+        buttonSize: 'sm',
+        okVariant: 'danger',
+        okTitle: 'SI',
+        cancelTitle: 'NO',
+        footerClass: 'p-2',
+        hideHeaderClose: false,
+        centered: true
+      })
+        .then(value => {
+          this.boxTwo = value
+          if (this.boxTwo == true) {
+             this.isBusy = true
+              db.collection("categorias").doc(id).delete().then(() => {
+              let index;
+              this.categorias.map((value, key) => {
+                if (value.id == id) index = key;
+              });
+              this.categorias.splice(index, 1);
+               this.isBusy = false
+            });
+          }
+        })
+        .catch(err => {
+          // An error occurred
+        })
+    },
   }
 };
 </script>

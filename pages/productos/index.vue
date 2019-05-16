@@ -9,7 +9,7 @@
     </div>
 
     <div class="row mt-2">
-      <b-col cols="12" md="18" offset-md="11">
+      <b-col cols="12" md="12" offset-md="1">
       <b-table
         id="productos"
         responsive
@@ -19,15 +19,18 @@
         :items="productos"
         :current-page="currentPage"
         :per-page="perPage"
-        :bordered="bordered"
       >
+      <div slot="table-busy" class="text-center my-2">
+        <b-spinner variant="primary" class="align-middle" label="Loading..."></b-spinner>
+        <strong>Cargando...</strong>
+      </div>
         <template slot="acciones" slot-scope="data">
           <b-button variant="success">Editar</b-button>
 
           <b-button
             variant="danger"
             type="button"
-            @click="eliminarProducto(data.item.id)"
+            @click="mensaje(data.item.id,data.index)"
           >Eliminar</b-button>
         </template>
       </b-table>
@@ -76,7 +79,10 @@ export default {
 
   data() {
     return {
-      fields: ["imagen", "nombre", "precio", "cantidad", "acciones"]
+      isBusy: false,
+      boxTwo: '',
+      fields: [{key: "Imagen"}, {key: "nombre", sortable: true}, {key: "precio"}, {key: "cantidad"}, {key: "categoria", sortable: true}, {key: "acciones"}]
+      //fields: ["Imagen", "nombre", "precio", "cantidad","categoria", "acciones"]
     };
   },
   computed: {
@@ -85,7 +91,7 @@ export default {
     }
   },
   methods: {
-    eliminarProducto(id) {
+    /*eliminarProducto(id) {
       db.collection("productos")
         .doc(id)
         .delete()
@@ -96,7 +102,39 @@ export default {
           })
           this.productos.splice(index, 1);
         });
-    }
+    }*/
+    mensaje(id, index) {
+      this.boxTwo = ''
+      this.$bvModal.msgBoxConfirm('¿Desea Eliminar Este Producto?', {
+        title: 'Eliminar',
+        size: 'sm',
+        buttonSize: 'sm',
+        okVariant: 'danger',
+        okTitle: 'SI',
+        cancelTitle: 'NO',
+        footerClass: 'p-2',
+        hideHeaderClose: false,
+        centered: true
+      })
+        .then(value => {
+          this.boxTwo = value
+          if (this.boxTwo == true) {
+             this.isBusy = true
+              db.collection("productos").doc(id).delete().then(() => {
+              let index;
+              this.productos.map((value, key) => {
+                if (value.id == id) index = key;
+              });
+              this.productos.splice(index, 1);
+               this.isBusy = false
+            });
+          }
+        })
+        .catch(err => {
+          // An error occurred
+        })
+    },
+
   }
 };
 </script>
