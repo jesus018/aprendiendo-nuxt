@@ -1,7 +1,12 @@
 <template>
   <div class="row mt-4">
     <div class="col-sm-3" v-for="producto in productos" :key="producto.id">
-      <cardProducto :precio="producto.precio" :nombre="producto.nombre" :imagen="producto.imagen"/>
+      <cardProducto
+        :precio="producto.precio"
+        :nombre="producto.nombre"
+        :imagen="producto.imagen"
+        :slug="producto.slug"
+      />
     </div>
   </div>
 </template>

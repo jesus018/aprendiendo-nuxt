@@ -1,60 +1,59 @@
 <template>
-    <b-form>
+  <b-form @submit.prevent="iniciarSesion">
+    <b-form-group id="label_email" label="Correo Electronico" label-for="email">
+      <b-form-input
+        id="email"
+        type="email"
+        required
+        v-model="form.correo"
+        placeholder="Ingrese su Correo Electronico"
+      ></b-form-input>
+    </b-form-group>
 
-        <div>
-            <h1>Registrar</h1>
-        </div>
-        <b-form-group
-          id="label_user"
-          label="Usuario"
-          label-for="usuario"
-        >
-          <b-form-input
-            id="user"
-            type="text"
-            required
-            placeholder="Escribe tu nombre de Usuario"
-          ></b-form-input>
-        </b-form-group>
+    <b-form-group id="lable_pass" label="Contraseña" label-for="contrasena">
+      <b-form-input
+        id="pass"
+        type="password"
+        required
+        v-model="form.pass"
+        placeholder="Ingrese su contraseña"
+      ></b-form-input>
+    </b-form-group>
 
-        <b-form-group
-          id="label_email"
-          label="Correo Electronico"
-          label-for="email"
-          description="Nunca compartiremos su correo electrónico con nadie más."
-        >
-          <b-form-input
-            id="email"
-            type="email"
-            required
-            placeholder="Ingrese su Correo Electronico"
-          ></b-form-input>
-        </b-form-group>
-
-        <b-form-group
-          id="lable_pass"
-          label="Contraseña"
-          label-for="contrasena"
-        >
-          <b-form-input
-            id="pass"
-            type="password"
-            required
-            placeholder="Ingrese una contraseña"
-          ></b-form-input>
-        </b-form-group>
-
-        <b-form-group
-          id="lable_pass_vr"
-          label="Confirmar la Contraseña"
-          label-for="contrasena_vr"
-        >
-          <b-form-input
-            id="pass_vr"
-            type="password"
-            required
-            placeholder="Introduce de nuevo una contraseña"
-          ></b-form-input>
-        </b-form-group>
-      </b-form>
+    <div slot="modal-footer">
+      <b-button type="submit" variant="primary">Enviar</b-button>
+      <b-button type="reset" variant="danger">Cancelar</b-button>
+    </div>
+  </b-form>
 </template>
+
+<script>
+import { auth } from "../services/firebase";
+
+export default {
+  data() {
+    return {
+      form: {}
+    };
+  },
+  methods: {
+    iniciarSesion() {
+      auth
+        .signInWithEmailAndPassword(this.form.correo, this.form.pass)
+        .then(res => {
+          this.$router.push({
+            path: "/"
+          });
+          console.log("Inicio sesion");
+          resetModal();
+        })
+        .catch(err => {
+          alert("Ha ocurrido un Error: " + message.err);
+        });
+    },
+    resetModal() {
+      (this.form.correo = ""), (this.form.pass = "");
+    }
+  }
+};
+</script>
