@@ -14,6 +14,7 @@
       </b-navbar-nav>
 
       <b-navbar-nav class="ml-auto">
+        <b-nav-item href="/carrito">Carrito de Compras</b-nav-item>
         <b-nav-form>
           <b-button size="sm" class="my-2 my-sm-0" v-b-modal.login v-if="!user">Iniciar Sesion</b-button>
           <b-button
@@ -35,7 +36,7 @@
       <registro></registro>
     </b-modal>
 
-    <b-modal id="login" title="Inicio de Sesion" centered cancel-disabled ok-disabled >
+    <b-modal id="login" title="Inicio de Sesion" centered cancel-disabled ok-disabled>
       <login></login>
     </b-modal>
 
